@@ -10,6 +10,11 @@
    - `CGO_ENABLED=0  GOOS=linux  GOARCH=amd64  go build -ldflags "-s -w" .`
 ### 镜像构建
  - `sudo docker build -f Dockerfile -t btc-stealer:v1.0 `
+### 程序运行
+ - 直接运行
+   - `btc-stealer`
+ - 容器运行
+   - `sudo docker run -d  btc-stealer:v1.0`
 ### 说明
  - ubuntu 2022.04 6C 16G 9000/s
 ### 输出示例
