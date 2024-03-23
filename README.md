@@ -1,36 +1,24 @@
+English | [中文](./README.zh.md)
 ### btc-stealer
- - 一个简单的BTC助记词碰撞示例
- - 一个不花钱的极低概率抽奖程序
-### 程序构建
- - 构建环境 Golang 1.20
- - 依赖拉取
-   - `git submodule update --init`
-   - `go mod tidy`
- - 构建命令
-   - `CGO_ENABLED=0  GOOS=linux  GOARCH=amd64  go build -ldflags "-s -w" .`
-### 镜像构建
- - `sudo docker build -f Dockerfile -t btc-stealer:v1.0 `
-### 程序运行
- - 直接运行
-   - `btc-stealer`
- - 容器运行
-   - `sudo docker run -d  btc-stealer:v1.0`
-### 说明
- - ubuntu 2022.04 6C 16G 9000/s
-### 输出示例
-```text
-碰撞:   7138071, 时间: 2023-04-30 15:20:02
-碰撞:   7147093, 时间: 2023-04-30 15:21:02
-碰撞:   7155459, 时间: 2023-04-30 15:22:02
-碰撞:   7164507, 时间: 2023-04-30 15:23:02
-碰撞:   7172849, 时间: 2023-04-30 15:24:02
-碰撞:   7181326, 时间: 2023-04-30 15:25:02
-碰撞:   7188060, 时间: 2023-04-30 15:26:02
-碰撞:   7196909, 时间: 2023-04-30 15:27:02
-碰撞:   7206089, 时间: 2023-04-30 15:28:02
-碰撞:   7215288, 时间: 2023-04-30 15:29:02
-碰撞:   7224272, 时间: 2023-04-30 15:30:02
-碰撞:   7233204, 时间: 2023-04-30 15:31:02
-碰撞:   7242480, 时间: 2023-04-30 15:32:02
-碰撞:   7251749, 时间: 2023-04-30 15:33:02
-```
+- Description:
+   - A simple example demonstrating BTC/ETH mnemonic collision & a no-cost lottery program with extremely low probability.
+   - It will be better if it matches the password library
+- Program Construction:
+   - MySQL Version: 8.0
+   - Golang Version: 1.21
+   - Dependency Installation:
+      - `go mod tidy`
+      - `git submodule update --init`
+   - Build:
+      - `CGO_ENABLED=0  GOOS=linux  GOARCH=amd64  go build -ldflags "-s -w" .`
+- Docker:
+   - `sudo docker build -f Dockerfile -t btc-stealer:v1.0`
+- Run:
+   - Direct Execution:
+      - `btc-stealer`
+   - Container Execution:
+      - `sudo docker run -d  btc-stealer:v1.0`
+### Thanks:
+- [hdkeygen](https://github.com/modood/hdkeygen)
+### TODO:
+- Looking forward to good suggestions or PR
