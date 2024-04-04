@@ -40,8 +40,7 @@ func HttpGetRequest(uri string, dst interface{}) {
 		return
 	}
 
-	if err = json.Unmarshal(bs, &dst); err != nil {
-		fmt.Println("unmarshal resp", err)
+	if err = json.Unmarshal(bs, dst); err != nil {
 		return
 	}
 }

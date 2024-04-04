@@ -79,37 +79,15 @@ func eip55checksum(address string) string {
 	return string(buf[:])
 }
 
-func AddressGenETH(bitSize int, mnemonic, passphrase string) {
-	km, err := common.NewKeyManager(bitSize, passphrase, mnemonic)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	masterKey, err := km.GetMasterKey()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	rk := masterKey.B58Serialize()
-
+func AddressGenETH(bitSize int) {
 	coins := make(map[string]*data.Eth)
 
 	var addrs []string
-	for i := 0; i < 10; i++ {
-		key, err := km.GetKey(common.PurposeBIP44, common.CoinTypeETH, 0, 0, uint32(i))
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		privateKey, address := encodeEthereum(key.Bip32Key.Key)
-
-		addrs = append(addrs, address)
-
-		coins[address] = &data.Eth{
-			RootKey:    rk,
-			Address:    address,
-			Mnemonic:   mnemonic,
-			PrivateKey: privateKey,
+	for i := 0; i < 5; i++ {
+		kv := AddressGenETHMasterAndSub(bitSize, common.Mnemonic(bitSize), "")
+		for addr, eth := range kv {
+			coins[addr] = eth
+			addrs = append(addrs, addr)
 		}
 	}
 
@@ -128,4 +106,41 @@ func AddressGenETH(bitSize int, mnemonic, passphrase string) {
 			data.SaveCoins(jokers)
 		}
 	}
+}
+
+func AddressGenETHMasterAndSub(bitSize int, mnemonic, passphrase string) map[string]*data.Eth {
+	km, err := common.NewKeyManager(bitSize, passphrase, mnemonic)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	masterKey, err := km.GetMasterKey()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	rk := masterKey.B58Serialize()
+
+	coins := make(map[string]*data.Eth)
+
+	var addrs []string
+	for i := 0; i < 4; i++ {
+		key, err := km.GetKey(common.PurposeBIP44, common.CoinTypeETH, 0, 0, uint32(i))
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		privateKey, address := encodeEthereum(key.Bip32Key.Key)
+
+		addrs = append(addrs, address)
+
+		coins[address] = &data.Eth{
+			RootKey:    rk,
+			Address:    address,
+			Mnemonic:   mnemonic,
+			PrivateKey: privateKey,
+		}
+	}
+
+	return coins
 }

@@ -9,9 +9,8 @@ type DBAuth struct {
 }
 
 type Eth struct {
-	EtherscanApiKey           string `json:"etherscan_api_key"`
-	ScanRequestFrequency      int64  `yaml:"scan_request_frequency"`
-	AddressGenerationQuantity int64  `yaml:"address_generation_quantity"`
+	EtherscanApiKey      string `yaml:"etherscan_api_key"`
+	ScanRequestFrequency int64  `yaml:"scan_request_frequency"`
 }
 
 type Proxy struct {

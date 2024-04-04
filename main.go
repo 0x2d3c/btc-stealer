@@ -28,10 +28,10 @@ func init() {
 }
 
 func RunCheck() {
-	m128, m256 := common.Mnemonic(128), common.Mnemonic(256)
 
-	eth.AddressGenETH(128, m128, "")
-	eth.AddressGenETH(256, m256, "")
+	eth.AddressGenETH(128)
+	eth.AddressGenETH(256)
+	//m128, m256 := common.Mnemonic(128), common.Mnemonic(256)
 
 	//btc.AddressGenBTC(128, "", m128, false)
 	//btc.AddressGenBTC(128, "", m128, true)
