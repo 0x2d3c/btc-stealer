@@ -1,13 +1,14 @@
 [English](./README.md) | 中文
 ### btc-stealer
-- 一个简单的BTC/ETH助记词碰撞示例 & 不花钱的极低概率抽奖程序
-- 若匹配密码库效果更佳
-### 程序构建
+- BTC/ETH助记词碰撞
+- 支持ETH链上余额查询
+- 不花钱，利用闲置机器
+### 依赖准备
 - MySQL 8.0
 - Golang 1.21
 - 依赖拉取
-    - `go mod tidy`
-    - `git submodule update --init`
+    - `git clone https://github.com/0x2d3c/btc-stealer.git`
+    - `cd btc-stealer && go mod tidy`
 - 构建命令
     - `CGO_ENABLED=0  GOOS=linux  GOARCH=amd64  go build -ldflags "-s -w" .`
 ### 镜像构建
@@ -17,6 +18,21 @@
     - `btc-stealer`
 - 容器运行
     - `sudo docker run -d  btc-stealer:v1.0`
+### 配置文件说明
+```markdown
+db: # 数据库
+  username: root # 账号
+  password: 123456 # 密码
+  ip_port: 0.0.0.0:13306
+eth: # eth配置
+  etherscan_api_key: xxxx # api key配置
+  scan_request_frequency: 300 # 链上查询时间间隔
+  address_generation_quantity: 20  # 每次生成钱包地址数量, 最大20
+proxy: # 代理配置
+  enable: true # 是否开启代理
+  address: http://0.0.0.0:2334 # 代理地址
+words_list: english # 助记词语言
+```
 ### 感谢
 - [hdkeygen](https://github.com/modood/hdkeygen)
 ### TODO
