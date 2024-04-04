@@ -27,7 +27,6 @@ db: # Database
 eth: # ETH configuration
   etherscan_api_key: xxxx # API key configuration
   scan_request_frequency: 300 # Chain query interval
-  address_generation_quantity: 20  # Number of wallet addresses generated each time, maximum 20
 proxy: # Proxy configuration
   enable: true # Whether to enable proxy
   address: http://0.0.0.0:2334 # Proxy address
