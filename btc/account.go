@@ -1,10 +1,11 @@
 package btc
 
 import (
-	"btc-stealer/common"
-	"btc-stealer/data"
 	"fmt"
 	"log"
+
+	"btc-stealer/common"
+	"btc-stealer/data"
 )
 
 func AddressGenBTC(bitSize int, passphrase, mnemonic string, compress bool) {

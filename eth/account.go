@@ -1,13 +1,14 @@
 package eth
 
 import (
-	"btc-stealer/common"
-	"btc-stealer/data"
 	"encoding/hex"
 	"fmt"
 	"log"
 	"strconv"
 	"strings"
+
+	"btc-stealer/common"
+	"btc-stealer/data"
 
 	"github.com/btcsuite/btcd/btcec/v2"
 	"golang.org/x/crypto/sha3"
