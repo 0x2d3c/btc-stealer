@@ -1,22 +1,17 @@
 package data
 
-import (
-	"btc-stealer/common"
-	"log"
-
-	"gorm.io/gorm"
-)
-
 type Eth struct {
-	gorm.Model
 	RootKey    string
 	Address    string
 	Mnemonic   string
 	PrivateKey string
 }
 
+func (e *Eth) RecordString() string {
+	return "Address:" + e.Address + "\nPrivateKey:" + e.PrivateKey + "\nRootKey:" + e.RootKey + "" + "\nMnemonic:" + e.Mnemonic
+}
+
 type Btc struct {
-	gorm.Model
 	Wif        string
 	Address    string
 	RootKey    string
@@ -24,8 +19,6 @@ type Btc struct {
 	PrivateKey string
 }
 
-func SaveCoins(coins interface{}) {
-	if err := common.DB.Create(coins).Error; err != nil {
-		log.Println("save coins, err", err.Error(), "\ncoins:\n", coins)
-	}
+func (b *Btc) RecordString() string {
+	return "Address:" + b.Address + "\nPrivateKey:" + b.PrivateKey + "\nRootKey:" + b.RootKey + "" + "\nWif:" + b.Wif + "\nMnemonic:" + b.Mnemonic
 }

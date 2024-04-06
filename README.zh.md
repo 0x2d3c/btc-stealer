@@ -20,17 +20,14 @@
     - `sudo docker run -d  btc-stealer:v1.0`
 ### 配置文件说明
 ```markdown
-db: # 数据库
-  username: root # 账号
-  password: 123456 # 密码
-  ip_port: 0.0.0.0:13306
-eth: # eth配置
-  etherscan_api_key: xxxx # api key配置
-  scan_request_frequency: 300 # 链上查询时间间隔
-proxy: # 代理配置
-  enable: true # 是否开启代理
-  address: http://0.0.0.0:2334 # 代理地址
-words_list: english # 助记词语言
+{
+  "proxy": {  # 代理配置
+    "enable": true, # 是否开启代理
+    "address": "http://0.0.0.0:2334" # 代理地址
+  },
+  "words_list": "english", # 助记词语言
+  "etherscan_api_key": "xxxxxxxx" # api key配置
+}
 ```
 ### 感谢
 - [hdkeygen](https://github.com/modood/hdkeygen)

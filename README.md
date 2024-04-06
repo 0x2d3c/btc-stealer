@@ -20,17 +20,14 @@ English | [中文](./README.zh.md)
     - `sudo docker run -d btc-stealer:v1.0`
 ### Configuration File Explanation
 ```markdown
-db: # Database
-  username: root # Account
-  password: 123456 # Password
-  ip_port: 0.0.0.0:13306
-eth: # ETH configuration
-  etherscan_api_key: xxxx # API key configuration
-  scan_request_frequency: 300 # Chain query interval
-proxy: # Proxy configuration
-  enable: true # Whether to enable proxy
-  address: http://0.0.0.0:2334 # Proxy address
-words_list: english # Mnemonic language
+{
+  "proxy": {  # Proxy configuration
+    "enable": true,
+    "address": "http://0.0.0.0:2334"
+  },
+  "words_list": "english", # Mnemonic language
+  "etherscan_api_key": "xxxxxxxx" API key configuration
+}
 ```
 ### Thanks
 - [hdkeygen](https://github.com/modood/hdkeygen)

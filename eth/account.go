@@ -34,9 +34,8 @@ func balanceChecker(addr ...string) map[string]float64 {
 	has := make(map[string]float64)
 	for _, acc := range resp.Result {
 		v, _ := strconv.ParseFloat(acc.Balance, 64)
-		if v != 0 {
-			has[acc.Account] = v / 10e17
-		}
+
+		has[acc.Account] = v / 10e17
 	}
 
 	return has
@@ -83,28 +82,49 @@ func AddressGenETH(bitSize int) {
 	coins := make(map[string]*data.Eth)
 
 	var addrs []string
-	for i := 0; i < 5; i++ {
-		kv := AddressGenETHMasterAndSub(bitSize, common.Mnemonic(bitSize), "")
-		for addr, eth := range kv {
-			coins[addr] = eth
-			addrs = append(addrs, addr)
-		}
+	for i := 0; i < 20; i++ {
+		coin := AddressGenETHMaster(bitSize, common.Mnemonic(bitSize), "")
+
+		coins[coin.Address] = coin
+		addrs = append(addrs, coin.Address)
 	}
 
 	checker := balanceChecker(addrs...)
 
-	if len(checker) != 0 {
+	for _, coin := range coins {
+		balance, ok := checker[coin.Address]
+		if ok && balance > 0 {
+			common.RecordBalance(coin.RecordString())
 
-		var jokers []*data.Eth
-		for _, coin := range coins {
-			if value, ok := checker[coin.Address]; ok && value > 0 {
-				jokers = append(jokers, coin)
-			}
+			continue
 		}
+		common.RecordNoBalance(coin.RecordString())
+	}
+}
 
-		if len(jokers) != 0 {
-			data.SaveCoins(jokers)
-		}
+func AddressGenETHMaster(bitSize int, mnemonic, passphrase string) *data.Eth {
+	km, err := common.NewKeyManager(bitSize, passphrase, mnemonic)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	masterKey, err := km.GetMasterKey()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	key, err := km.GetKey(common.PurposeBIP44, common.CoinTypeETH, 0, 0, 0)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	privateKey, address := encodeEthereum(key.Bip32Key.Key)
+
+	return &data.Eth{
+		Address:    address,
+		Mnemonic:   mnemonic,
+		PrivateKey: privateKey,
+		RootKey:    masterKey.B58Serialize(),
 	}
 }
 

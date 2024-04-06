@@ -1,0 +1,8 @@
+{
+  "proxy": {
+    "enable": true,
+    "address": "http://0.0.0.0:2334"
+  },
+  "words_list": "english",
+  "etherscan_api_key": "xxxxxx"
+}
