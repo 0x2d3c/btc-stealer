@@ -29,22 +29,18 @@ func init() {
 func RunETHCheck() {
 	ticker := time.NewTicker(time.Second * 3)
 	for range ticker.C {
-		eth.AddressGenETH(128)
-		eth.AddressGenETH(256)
+		eth.AddressETHCheck()
 	}
 }
 
-// RunBTCCheck uncompleted method
-func RunBTCCheck() {
-	m128, m256 := common.Mnemonic(128), common.Mnemonic(256)
-
-	btc.AddressGenBTC(128, "", m128, false)
-	btc.AddressGenBTC(128, "", m128, true)
-	btc.AddressGenBTC(256, "", m256, false)
-	btc.AddressGenBTC(256, "", m256, true)
-}
-
 func main() {
+
+	go eth.RunETHOfflineCheck()
+	go btc.RunBTCOfflineCheck()
+
+	if common.GetMode() == common.ModeOffline {
+		select {}
+	}
 
 	RunETHCheck()
 }

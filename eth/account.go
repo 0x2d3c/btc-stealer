@@ -79,31 +79,73 @@ func eip55checksum(address string) string {
 	return string(buf[:])
 }
 
-func AddressGenETH(bitSize int) {
-	coins := make(map[string]*data.Eth)
+func addressGenETH(bitSize, size int) (map[string]*data.Eth, []string) {
+	address := make([]string, size)
+	coins := make(map[string]*data.Eth, size)
+	for i := range address {
+		coin := addressGenETHMaster(bitSize, common.Mnemonic(bitSize), "")
 
-	var addrs []string
-	for i := 0; i < 20; i++ {
-		coin := AddressGenETHMaster(bitSize, common.Mnemonic(bitSize), "")
-
+		address[i] = coin.Address
 		coins[coin.Address] = coin
-		addrs = append(addrs, coin.Address)
 	}
+	return coins, address
+}
 
-	checker := balanceChecker(addrs...)
-
-	for _, coin := range coins {
-		balance, ok := checker[coin.Address]
-		if ok && balance > 0 {
-			common.RecordBalance(coin.RecordString())
-
-			continue
-		}
-		common.RecordNoBalance(coin.RecordString())
+func AddressETHCheck() {
+	for _, bit := range common.Bits {
+		addressGenBitETH(bit)
 	}
 }
 
-func AddressGenETHMaster(bitSize int, mnemonic, passphrase string) *data.Eth {
+func addressGenBitETH(bitSize int) {
+	size := 20
+	if common.GetMode() == common.ModeOffline {
+		size = 1000
+	}
+
+	coins, address := addressGenETH(bitSize, size)
+
+	has, hasNot := common.OfflineETHCheck(address)
+	for _, wallet := range has {
+		coin, ok := coins[wallet]
+		if !ok {
+			continue
+		}
+		common.RecordBalance(coin.String())
+	}
+
+	if common.GetMode() == common.ModeOffline {
+		return
+	}
+
+	checker := balanceChecker(hasNot...)
+	for _, coin := range coins {
+		balance, ok := checker[coin.Address]
+		if !ok || balance == 0 {
+			continue
+		}
+		common.RecordBalance(coin.String())
+	}
+}
+
+func RunETHOfflineCheck() {
+	for {
+		for _, bit := range common.Bits {
+			coins, address := addressGenETH(bit, 1000)
+
+			has, _ := common.OfflineETHCheck(address)
+			for _, wallet := range has {
+				coin, ok := coins[wallet]
+				if !ok {
+					continue
+				}
+				common.RecordBalance(coin.String())
+			}
+		}
+	}
+}
+
+func addressGenETHMaster(bitSize int, mnemonic, passphrase string) *data.Eth {
 	km, err := common.NewKeyManager(bitSize, passphrase, mnemonic)
 	if err != nil {
 		log.Fatal(err)
@@ -129,7 +171,7 @@ func AddressGenETHMaster(bitSize int, mnemonic, passphrase string) *data.Eth {
 	}
 }
 
-func AddressGenETHMasterAndSub(bitSize int, mnemonic, passphrase string) map[string]*data.Eth {
+func addressGenETHMasterAndSub(bitSize int, mnemonic, passphrase string) map[string]*data.Eth {
 	km, err := common.NewKeyManager(bitSize, passphrase, mnemonic)
 	if err != nil {
 		log.Fatal(err)

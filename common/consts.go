@@ -42,3 +42,7 @@ const (
 const (
 	Apostrophe uint32 = 0x80000000 // 0'
 )
+
+var (
+	Bits = []int{128, 256}
+)

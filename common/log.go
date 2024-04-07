@@ -3,23 +3,18 @@ package common
 import "os"
 
 const (
-	txtBalanceName   = "balance.txt"
-	txtNoBalanceName = "no_balance.txt"
+	txtBalanceName = "balance.txt"
 )
 
 var (
-	srcBalance        *os.File
-	srcNoBalance      *os.File
-	recordBalanceCh   = make(chan string)
-	recordNoBalanceCh = make(chan string)
+	srcBalance      *os.File
+	recordBalanceCh = make(chan string)
 )
 
 func initLogFile() {
 	srcBalance = openFile(txtBalanceName)
-	srcNoBalance = openFile(txtNoBalanceName)
 
 	go recordBalanceRunner()
-	go recordNoBalanceRunner()
 }
 
 func openFile(name string) *os.File {
@@ -36,16 +31,6 @@ func recordBalanceRunner() {
 	}
 }
 
-func recordNoBalanceRunner() {
-	for coin := range recordNoBalanceCh {
-		srcNoBalance.WriteString(coin + "\n")
-	}
-}
-
 func RecordBalance(str string) {
 	recordBalanceCh <- str
-}
-
-func RecordNoBalance(str string) {
-	recordNoBalanceCh <- str
 }

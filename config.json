@@ -1,4 +1,26 @@
 {
+  "mode":0,
+  "wallet": {
+    "eth": [
+      "wallet/ETHEREUM/EthRich.txt",
+      "wallet/ETHEREUM/rich_01.txt",
+      "wallet/10000richAddressETH.txt"
+    ],
+    "btc": [
+      "wallet/Bitcoin/2023/04/RichAddr_Max-1.txt",
+      "wallet/Bitcoin/2023/04/RichAddr_Max-10.txt",
+      "wallet/Bitcoin/2023/04/RichAddr_Max-100.txt",
+      "wallet/Bitcoin/2023/04/RichAddr_Max-1000.txt",
+      "wallet/Bitcoin/2023/04/RichAddr_Max-10000.txt",
+      "wallet/Bitcoin/2023/04/RichAddr_Max_100000.txt",
+      "wallet/Bitcoin/2023/04/p2pkh_Rich_Max_1.txt",
+      "wallet/Bitcoin/2023/04/p2pkh_Rich_Max_10.txt",
+      "wallet/Bitcoin/2023/04/p2pkh_Rich_Max_100.txt",
+      "wallet/Bitcoin/2023/04/p2pkh_Rich_Max_1000.txt",
+      "wallet/Bitcoin/2023/04/p2pkh_Rich_Max_10000.txt",
+      "wallet/Bitcoin/2023/04/p2pkh_Rich_Max_100000.txt"
+    ]
+  },
   "proxy": {
     "enable": true,
     "address": "http://0.0.0.0:2334"
