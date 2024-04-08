@@ -1,5 +1,9 @@
-CGO_ENABLED=0  GOOS=linux  GOARCH=amd64  go build -ldflags "-s -w" .
+git submodule update --init
 
-upx --best --lzma btc-stealer
+go mod tidy
 
-sudo docker build -f Dockerfile -t btc-stealer:v1.0 .
+CGO_ENABLED=0 go build -ldflags "-s -w" .
+
+chmod +x btc-stealer
+
+./btc-stealer
