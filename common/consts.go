@@ -44,5 +44,6 @@ const (
 )
 
 var (
-	Bits = []int{128, 256}
+	Bits     = []int{128, 256}
+	Compress = []bool{true, false}
 )

@@ -1,14 +1,12 @@
 package eth
 
 import (
+	"btc-stealer/common"
+	"btc-stealer/data"
 	"encoding/hex"
 	"fmt"
 	"log"
-	"strconv"
 	"strings"
-
-	"btc-stealer/common"
-	"btc-stealer/data"
 
 	"github.com/btcsuite/btcd/btcec/v2"
 	"golang.org/x/crypto/sha3"
@@ -23,23 +21,6 @@ type EtherScanResp struct {
 	Status  string         `json:"status"`
 	Message string         `json:"message"`
 	Result  []EtherScanAcc `json:"result"`
-}
-
-func balanceChecker(addr ...string) map[string]float64 {
-	uri := common.GetETHScanAPIAddress() + strings.Join(addr, ",")
-
-	var resp EtherScanResp
-
-	common.HttpGetRequest(uri, &resp)
-
-	has := make(map[string]float64)
-	for _, acc := range resp.Result {
-		v, _ := strconv.ParseFloat(acc.Balance, 64)
-
-		has[acc.Account] = v / 10e17
-	}
-
-	return has
 }
 
 // encodeEthereum encodes the private key and address for Ethereum.
@@ -99,47 +80,29 @@ func AddressETHCheck() {
 
 func addressGenBitETH(bitSize int) {
 	size := 20
-	if common.GetMode() == common.ModeOffline {
-		size = 1000
-	}
 
 	coins, address := addressGenETH(bitSize, size)
-
-	has, hasNot := common.OfflineETHCheck(address)
-	for _, wallet := range has {
-		coin, ok := coins[wallet]
+	for _, addr := range address {
+		coin, ok := coins[addr]
 		if !ok {
-			continue
+			return
 		}
-		common.RecordBalance(coin.String())
-	}
+		for {
+			res := common.HttpETH(addr)
 
-	if common.GetMode() == common.ModeOffline {
-		return
-	}
-
-	checker := balanceChecker(hasNot...)
-	for _, coin := range coins {
-		balance, ok := checker[coin.Address]
-		if !ok || balance == 0 {
-			continue
-		}
-		common.RecordBalance(coin.String())
-	}
-}
-
-func RunETHOfflineCheck() {
-	for {
-		for _, bit := range common.Bits {
-			coins, address := addressGenETH(bit, 1000)
-
-			has, _ := common.OfflineETHCheck(address)
-			for _, wallet := range has {
-				coin, ok := coins[wallet]
-				if !ok {
-					continue
+			var done bool
+			switch {
+			case res == "":
+				done = true
+			case strings.HasPrefix(res, "0x"):
+				if res != "0x0" {
+					common.RecordBalance(coin.String())
 				}
-				common.RecordBalance(coin.String())
+				done = true
+			}
+
+			if done {
+				break
 			}
 		}
 	}

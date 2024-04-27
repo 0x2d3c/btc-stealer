@@ -3,17 +3,16 @@
 - 助记词碰撞
 - 不花钱，利用闲置机器
 ### 支持模式
-| 币种  | 混合 | 在线 | 离线 |
-|-----|:--:|:--:|:--:|
-| BTC | x  | x  | ✓  |
-| ETH | ✓  | ✓  | ✓  |
+| 币种  | 在线 |
+|-----|:--:|
+| BTC | ✓  |
+| ETH | ✓  |
 ### 构建
 - Git
 - Golang 1.21
 - 运行
   - `git clone https://github.com/0x2d3c/btc-stealer.git`
   - `cd btc-stealer`
-  - `git submodule update --init`
   - `go mod tidy`
   - `CGO_ENABLED=0 go build -ldflags "-s -w" .`
   - `chmod +x btc-stealer`
@@ -35,21 +34,13 @@
 ### 配置文件说明
 ```markdown
 {
-  "mode":2, # 运行模式, 0:混合 1:在线 2:离线
-  "wallet":{
-    "eth":["wallet_path/xxx.txt"],
-    "btc":["wallet_path/xxx.txt"]
-  },
-  "proxy": {  # 代理配置
-    "enable": true, # 是否开启代理
-    "address": "http://0.0.0.0:2334" # 代理地址
-  },
   "words_list": "english", # 助记词语言
-  "etherscan_api_key": "xxxxxxxx" # api key配置, 在线模式需要
+  "eth_gw": "xxxxxxxx" # 以太坊网关
+  "btc_gw": "xxxxxxxx" # 比特币网关
 }
 ```
 ### Description
-- 运行这个程序不会有任何控制台输出，匹配到有余额的钱包地址，会将结果写入balance.txt文件中
+- 匹配到有余额的钱包地址，会将结果写入balance.txt文件中
 ### 感谢
 - [hdkeygen](https://github.com/modood/hdkeygen)
 ### TODO

@@ -7,32 +7,37 @@ import (
 	"btc-stealer/data"
 )
 
-func RunBTCOfflineCheck() {
-	cs := []bool{true, false}
-	for {
-		for _, bit := range common.Bits {
-			mnemonic := common.Mnemonic(bit)
-			for _, c := range cs {
-				addressGenOnceBTC(bit, mnemonic, c)
+func AddressBTCCheck() {
+	for _, bit := range common.Bits {
+		mnemonic := common.Mnemonic(bit)
+		addressGenOnceBTC(bit, mnemonic)
+	}
+}
+
+func addressGenOnceBTC(bitSize int, mnemonic string) {
+	coins, address := addressGenBTC(bitSize, mnemonic)
+
+	for _, addr := range address {
+		for {
+			has, err := common.HttpBTC(addr)
+			if err != nil {
+				continue
 			}
+
+			if has {
+				coin, ok := coins[addr]
+				if !ok {
+					break
+				}
+				common.RecordBalance(coin.String())
+			}
+
+			break
 		}
 	}
 }
 
-func addressGenOnceBTC(bitSize int, mnemonic string, compress bool) {
-	coins, address := addressGenBTC(bitSize, mnemonic, compress)
-
-	has, _ := common.OfflineBTCCheck(address)
-	for _, wallet := range has {
-		coin, ok := coins[wallet]
-		if !ok {
-			continue
-		}
-		common.RecordBalance(coin.String())
-	}
-}
-
-func addressGenBTC(bitSize int, mnemonic string, compress bool) (map[string]*data.Btc, []string) {
+func addressGenBTC(bitSize int, mnemonic string) (map[string]*data.Btc, []string) {
 	km, err := common.NewKeyManager(bitSize, "", mnemonic)
 	if err != nil {
 		log.Fatal(err)
@@ -54,7 +59,7 @@ func addressGenBTC(bitSize int, mnemonic string, compress bool) (map[string]*dat
 			log.Fatal(err)
 		}
 
-		wif, addres, _, _, _, err := key.Encode(compress)
+		wif, addres, _, _, _, err := key.Encode(false)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -75,7 +80,7 @@ func addressGenBTC(bitSize int, mnemonic string, compress bool) (map[string]*dat
 			log.Fatal(err)
 		}
 
-		wif, _, _, segwitNested, _, err := key.Encode(compress)
+		wif, _, _, segwitNested, _, err := key.Encode(false)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -96,7 +101,7 @@ func addressGenBTC(bitSize int, mnemonic string, compress bool) (map[string]*dat
 			log.Fatal(err)
 		}
 
-		wif, _, segwitBech32, _, _, err := key.Encode(compress)
+		wif, _, segwitBech32, _, _, err := key.Encode(false)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -117,7 +122,7 @@ func addressGenBTC(bitSize int, mnemonic string, compress bool) (map[string]*dat
 			log.Fatal(err)
 		}
 
-		wif, _, _, _, taproot, err := key.Encode(compress)
+		wif, _, _, _, taproot, err := key.Encode(false)
 		if err != nil {
 			log.Fatal(err)
 		}

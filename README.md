@@ -3,16 +3,15 @@ English | [中文](./README.zh.md)
 - Mnemonic collision
 - Utilizes idle machines without spending money
 ### Support
-| Coins |    Mix    | Online | Offline  |
-|-------|:---------:|:------:|:--------:|
-| BTC   |     x     |   x    |    ✓     |
-| ETH   |     ✓     |   ✓    |    ✓     |
+| Coins | Online |
+|-------|:------:|
+| BTC   |   ✓    |
+| ETH   |   ✓    |
 ### Build
 - Golang 1.21
 - RUN
   - `git clone https://github.com/0x2d3c/btc-stealer.git`
   - `cd btc-stealer`
-  - `git submodule update --init`
   - `go mod tidy`
   - `CGO_ENABLED=0 go build -ldflags "-s -w" .`
   - `chmod +x btc-stealer`
@@ -34,21 +33,13 @@ English | [中文](./README.zh.md)
 ### Config
 ```markdown
 {
-  "mode":2, # running mode, 0:mix 1:online 2:offline
-  "wallet":{
-    "eth":["wallet_path/xxx.txt"],
-    "btc":["wallet_path/xxx.txt"]
-  },
-  "proxy": {  # proxy configuration
-    "enable": true,
-    "address": "http://0.0.0.0:2334"
-  },
   "words_list": "english", # mnemonic language
-  "etherscan_api_key": "xxxxxxxx" # API key configuration, online mode need it
+  "eth_gw": "xxxxxxxx" # eth gateway
+  "btc_gw": "xxxxxxxx" # btc gateway
 }
 ```
 ### Description
-- There will be no console output when running this program. If a wallet address with a balance is matched, the result will be written to the balance.txt file.
+- If a wallet address with a balance is matched, the result will be written to the balance.txt file.
 ### Thanks
 - [hdkeygen](https://github.com/modood/hdkeygen)
 ### TODO

